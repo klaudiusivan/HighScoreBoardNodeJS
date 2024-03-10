@@ -1,0 +1,25 @@
+{
+  "name": "highscoreboardnodejs",
+  "version": "1.0.0",
+  "description": "An interactive Game Leaderboard system built with Node.js and MongoDB. Players can submit their scores, compete for top rankings, and track their progress over time. Designed to enhance the gaming experience and foster healthy competition among players.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Klaudius Ivan R",
+  "license": "ISC",
+  "dependencies": {
+    "bson": "^6.3.0",
+    "express": "^4.18.2",
+    "mongodb": "^6.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klaudiusivan/HighScoreBoardNodeJS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/klaudiusivan/HighScoreBoardNodeJS/issues"
+  },
+  "homepage": "https://github.com/klaudiusivan/HighScoreBoardNodeJS#readme"
+}
