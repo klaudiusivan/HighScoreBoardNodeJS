@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const { connectToMongoDB, closeConnection } = require('./database');
 const playerRoutes = require('./playerRoutes'); // Import the player routes
+const authRoutes = require('./authRoutes'); // Import the authentication routes
+const { authenticateToken } = require('./authMiddleware'); // Import authentication middleware
 
 const app = express();
 
@@ -17,8 +19,11 @@ async function startServer() {
         // Connect to MongoDB
         const db = await connectToMongoDB(uri, options);
 
+        // Mount authentication routes
+        app.use('/auth', authRoutes);
+
         // Mount player routes
-        app.use('/api/players', playerRoutes);
+        app.use('/api/players', authenticateToken, playerRoutes); // Apply authentication middleware to player routes
 
         // Start the server
         const port = process.env.PORT || 3000;
@@ -57,3 +62,4 @@ app.get('/', (req, res) => {
 
 // Start the server
 startServer();
+
