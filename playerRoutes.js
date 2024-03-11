@@ -82,6 +82,23 @@ router.post('/submit-score',
   }
 );
 
+router.get('/leaderboard', async (req, res) => {
+  try {
+    // Retrieve top scores from the database
+    const topScores = await Player.find().sort({ score: -1 }).limit(10); // Retrieve top 10 scores, sorted in descending order
+
+    // Respond with top scores
+    res.status(200).json({
+      status: 'success',
+      data: {
+        leaderboard: topScores
+      }
+    });
+  } catch (error) {
+    // Handle errors and respond with error message
+    res.status(500).json({ message: 'Failed to retrieve leaderboard' });
+  }
+});
 
 module.exports = router;
 
