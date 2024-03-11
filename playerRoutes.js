@@ -46,27 +46,42 @@ router.post(
 );
 
 // Route for submitting scores (protected)
-router.post('/submit-score', verifyToken, async (req, res) => {
-  // Get player ID from request object (added by auth middleware)
-  const playerId = req.playerId;
+router.post('/submit-score',
+  [
+    // Validation rules for score data
+    body('score').notEmpty().isInt().withMessage('Score must be a non-empty integer'),
+    // Add more validation rules as needed
+  ],
+  verifyToken, // Apply authentication middleware
+  async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  try {
-    // Find the player in the database
-    const player = await Player.findById(playerId);
+    // Get player ID from request object (added by auth middleware)
+    const playerId = req.playerId;
 
-    // Update player's score with data from request body
-    player.score = req.body.score;
+    try {
+      // Find the player in the database
+      const player = await Player.findById(playerId);
 
-    // Save the updated player to the database
-    await player.save();
+      // Update player's score with data from request body
+      player.score = req.body.score;
 
-    // Respond with success message
-    res.status(200).json({ message: 'Score submitted successfully' });
-  } catch (error) {
-    // Handle errors and respond with error message
-    res.status(500).json({ message: 'Failed to submit score' });
+      // Save the updated player to the database
+      await player.save();
+
+      // Respond with success message
+      res.status(200).json({ message: 'Score submitted successfully' });
+    } catch (error) {
+      // Handle errors and respond with error message
+      res.status(500).json({ message: 'Failed to submit score' });
+    }
   }
-});
+);
+
 
 module.exports = router;
 
