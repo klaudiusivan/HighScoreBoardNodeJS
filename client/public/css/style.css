@@ -1,0 +1,13 @@
+/* styles.css */
+.player-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .rank, .player-name, .score {
+    flex: 1;
+    text-align: center;
+  }
+  

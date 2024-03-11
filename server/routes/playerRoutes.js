@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const Player = require('./playerModel');
+const Player = require('../models/playerModel');
 const { body, validationResult } = require('express-validator'); // Import validation modules from express-validator
-const { verifyToken } = require('./authMiddleware'); // Import authentication middleware
+const { verifyToken } = require('../authMiddleware'); // Import authentication middleware
 
 // Route for player registration
 router.post(

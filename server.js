@@ -2,10 +2,10 @@
 
 const express = require('express');
 const cors = require('cors');
-const { connectToMongoDB, closeConnection } = require('./database');
-const playerRoutes = require('./playerRoutes'); // Import the player routes
-const authRoutes = require('./authRoutes'); // Import the authentication routes
-const { authenticateToken } = require('./authMiddleware'); // Import authentication middleware
+const { connectToMongoDB, closeConnection } = require('./server/database');
+const playerRoutes = require('./server/routes/playerRoutes'); // Import the player routes
+const authRoutes = require('./server/routes/authRoutes'); // Import the authentication routes
+const { authenticateToken } = require('./server/authMiddleware'); // Import authentication middleware
 
 const app = express();
 
