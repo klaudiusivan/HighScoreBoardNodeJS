@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Player = require('./playerModel');
 const { validationResult } = require('express-validator'); // Import validation result from express-validator
+const { verifyToken } = require('./authMiddleware');
 
 // Validate input data using express-validator middleware
 router.post(
@@ -45,4 +46,21 @@ router.post(
   }
 );
 
-module.exports = router;
+// Protected route for submitting scores
+router.post('/submit-score', verifyToken, async (req, res) => {
+    // Get player ID from request object (added by auth middleware)
+    const playerId = req.playerId;
+  
+    // Example: Update player's score in the database
+    try {
+      const player = await Player.findById(playerId);
+      player.score = req.body.score;
+      await player.save();
+      res.status(200).json({ message: 'Score submitted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to submit score' });
+    }
+  });
+  
+  module.exports = router;
+  
