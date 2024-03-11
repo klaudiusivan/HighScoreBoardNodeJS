@@ -3,16 +3,15 @@
 const express = require('express');
 const router = express.Router();
 const Player = require('./playerModel');
-const { validationResult } = require('express-validator'); // Import validation result from express-validator
-const { verifyToken } = require('./authMiddleware');
+const { body, validationResult } = require('express-validator'); // Import validation modules from express-validator
+const { verifyToken } = require('./authMiddleware'); // Import authentication middleware
 
-// Validate input data using express-validator middleware
+// Route for player registration
 router.post(
   '/register',
   [
-    // Add validation rules for player registration fields
-    // Example: check if player name is not empty and is of type string
-    body('playerName').notEmpty().isString(),
+    // Validation rules for player registration fields
+    body('playerName').notEmpty().isString().withMessage('Player name must be a non-empty string'),
     // Add more validation rules as needed
   ],
   async (req, res) => {
@@ -46,21 +45,28 @@ router.post(
   }
 );
 
-// Protected route for submitting scores
+// Route for submitting scores (protected)
 router.post('/submit-score', verifyToken, async (req, res) => {
-    // Get player ID from request object (added by auth middleware)
-    const playerId = req.playerId;
-  
-    // Example: Update player's score in the database
-    try {
-      const player = await Player.findById(playerId);
-      player.score = req.body.score;
-      await player.save();
-      res.status(200).json({ message: 'Score submitted successfully' });
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to submit score' });
-    }
-  });
-  
-  module.exports = router;
-  
+  // Get player ID from request object (added by auth middleware)
+  const playerId = req.playerId;
+
+  try {
+    // Find the player in the database
+    const player = await Player.findById(playerId);
+
+    // Update player's score with data from request body
+    player.score = req.body.score;
+
+    // Save the updated player to the database
+    await player.save();
+
+    // Respond with success message
+    res.status(200).json({ message: 'Score submitted successfully' });
+  } catch (error) {
+    // Handle errors and respond with error message
+    res.status(500).json({ message: 'Failed to submit score' });
+  }
+});
+
+module.exports = router;
+
