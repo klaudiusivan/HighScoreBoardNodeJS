@@ -1,3 +1,5 @@
+// playerModel.js
+
 const mongoose = require('mongoose');
 
 const playerSchema = new mongoose.Schema({
@@ -5,13 +7,13 @@ const playerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
+  username: {
     type: String,
     required: true,
     unique: true
   },
-  dateOfBirth: {
-    type: Date,
+  password: {
+    type: String,
     required: true
   },
   // Add more fields as needed

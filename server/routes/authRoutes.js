@@ -4,59 +4,59 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('./userModel');
+const Player = require('../models/playerModel'); // Corrected path
 
 // User registration route
 router.post('/register', async (req, res) => {
   try {
     // Extract user data from request body
-    const { username, password } = req.body;
+    const { playerName, email, dateOfBirth, password } = req.body;
 
-    // Check if user with the same username already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Username already exists' });
+    // Check if player with the same email already exists
+    const existingPlayer = await Player.findOne({ email });
+    if (existingPlayer) {
+      return res.status(400).json({ message: 'Email already exists' });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
-    const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
+    // Create new player
+    const newPlayer = new Player({ playerName, email, dateOfBirth, password: hashedPassword });
+    await newPlayer.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'Player registered successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to register user' });
+    res.status(500).json({ message: 'Failed to register player' });
   }
 });
 
 // User login route
 router.post('/login', async (req, res) => {
   try {
-    // Extract username and password from request body
-    const { username, password } = req.body;
+    // Extract email and password from request body
+    const { email, password } = req.body;
 
-    // Find user by username
-    const user = await User.findOne({ username });
-    if (!user) {
+    // Find player by email
+    const player = await Player.findOne({ email });
+    if (!player) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // Validate password
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, player.password);
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ playerId: player._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to authenticate user' });
+    res.status(500).json({ message: 'Failed to authenticate player' });
   }
 });
 

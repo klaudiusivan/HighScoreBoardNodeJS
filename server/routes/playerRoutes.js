@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const Player = require('../models/playerModel');
+const Player = require('../models/playerModel'); // Corrected path
 const { body, validationResult } = require('express-validator'); // Import validation modules from express-validator
-const { verifyToken } = require('../authMiddleware'); // Import authentication middleware
+const { verifyToken } = require('../authMiddleware'); // Corrected path
 
 // Route for player registration
 router.post(
@@ -39,7 +39,7 @@ router.post(
       // Handle errors and respond with error message
       res.status(500).json({
         status: 'error',
-        message: 'Failed to register player'
+        message: `Failed to register player ${error}`
       });
     }
   }

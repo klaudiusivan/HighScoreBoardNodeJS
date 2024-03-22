@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Score</title>
+</head>
+<body>
+    <h2>Submit Score</h2>
+    <form id="submitScoreForm" action="/api/players/submit-score" method="POST">
+        <label for="score">Score:</label>
+        <input type="number" id="score" name="score" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Handle form submission
+        document.getElementById('submitScoreForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this); // Get form data
+            const score = formData.get('score'); // Get score from form data
+
+            try {
+                // Send POST request to submit score
+                const response = await fetch('/api/players/submit-score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add authorization token if required
+                        // 'Authorization': 'Bearer <token>'
+                    },
+                    body: JSON.stringify({ score }) // Convert score to JSON and send in request body
+                });
+
+                const data = await response.json(); // Parse response JSON
+
+                // Display response message
+                alert(data.message);
+            } catch (error) {
+                console.error('Error submitting score:', error);
+                alert('Failed to submit score');
+            }
+        });
+    </script>
+</body>
+</html>
