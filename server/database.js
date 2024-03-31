@@ -1,24 +1,23 @@
-const { MongoClient } = require('mongodb');
 const mongoose = require('mongoose');
 const uri = 'mongodb://localhost:27017/';
 const dbName = 'highscore';
 
 async function connectToMongoDB() {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true,  });
     try {
-        // await client.connect();
-        await mongoose.createConnection(`${uri}${dbName}`);
+        await mongoose.connect(`${uri}${dbName}`, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log('Connected to MongoDB');
-        // return client.db(dbName); // Return the database object for further use
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
         throw error;
     }
 }
 
-async function closeConnection(client) {
+async function closeConnection() {
     try {
-        await client.close();
+        await mongoose.disconnect();
         console.log('Connection to MongoDB closed');
     } catch (error) {
         console.error('Error closing connection to MongoDB:', error);
