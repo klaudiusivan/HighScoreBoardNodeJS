@@ -14,8 +14,8 @@ const app = express();
 async function startServer() {
     try {
         // Connect to MongoDB
-        const db = await connectToMongoDB();
-        console.log('Connected to MongoDB');
+        await connectToMongoDB();
+        console.log('Connected to MongoDB'); 
 
         // Middleware for parsing JSON requests
         app.use(express.json());

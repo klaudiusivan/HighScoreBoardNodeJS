@@ -96,7 +96,7 @@ router.get('/leaderboard', async (req, res) => {
     });
   } catch (error) {
     // Handle errors and respond with error message
-    res.status(500).json({ message: 'Failed to retrieve leaderboard' });
+    res.status(500).json({ message: `Failed to retrieve leaderboard ${error}` });
   }
 });
 
